@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, $role = null)
     {
-        if (!Auth::check() || Auth::user()->role !== $role) {
-            return redirect('/dashboard')->with('error', 'Akses ditolak.');
+        if (!Auth::check() || (isset($role) && Auth::user()->role !== $role)) {
+            abort(403, 'Unauthorized');
         }
 
         return $next($request);

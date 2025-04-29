@@ -8,9 +8,30 @@ use Illuminate\Http\Request;
 class PelangganController extends Controller
 {
     // Menampilkan halaman admin/data dengan form pelanggan
-    public function data()
+    public function data(Request $request)
     {
-        return view('admin.data'); // View ini bisa berisi form pembuatan pelanggan
+        $query = Pelanggan::query();
+
+        // Filter Pertanggal
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        // Filter Perbulan
+        if ($request->filled('month')) {
+            $query->whereYear('created_at', date('Y', strtotime($request->month)))
+                  ->whereMonth('created_at', date('m', strtotime($request->month)));
+        }
+
+        // Filter Perhari (Hari dalam Minggu)
+        if ($request->filled('day_of_week')) {
+            $query->whereRaw('DAYOFWEEK(created_at) = ?', [$request->day_of_week]);
+        }
+
+        $pelanggan = $query->get();
+
+        return view('admin.data', ['pelanggan' => $pelanggan]);
+        // return view('admin.data'); // View ini bisa berisi form pembuatan pelanggan
     }
 
     // Menyimpan data pelanggan ke database
@@ -43,6 +64,7 @@ class PelangganController extends Controller
         $pelanggan->npwp = $validated['npwp'];
         $pelanggan->alamat_lengkap = $validated['alamat_lengkap'];
         $pelanggan->sumber_informasi = $validated['sumber_informasi'];
+        // $pelanggan->created_at = $validated['created_at'];
         $pelanggan->save();
 
         // Redirect atau response

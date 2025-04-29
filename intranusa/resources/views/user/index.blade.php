@@ -415,6 +415,35 @@
                 </div>
             </div>
         </div>
+
+        {{-- <div class="card border-right">
+            <div class="card-body">
+                <div class="d-flex d-lg-flex d-md-block align-items-center">
+                    <div>
+                        @if (Auth::user()->status_langganan === 'Aktif')
+                            <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium">
+                                Langganan Aktif
+                            </h2>
+                        @elseif (Auth::user()->status_langganan === 'Disetujui')
+                            <h2 class="text-warning mb-1 w-100 text-truncate font-weight-medium">
+                                Disetujui - Silakan lakukan pembayaran
+                            </h2>
+                            <a href="{{ route('bayar.langganan') }}" class="btn btn-primary btn-sm mt-2">Bayar Sekarang</a>
+                        @else
+                            <h2 class="text-secondary mb-1 w-100 text-truncate font-weight-medium">
+                                Status: {{ Auth::user()->status_langganan ?? 'Belum mendaftar' }}
+                            </h2>
+                        @endif
+                        <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Paket berlangganan</h6>
+                    </div>
+                    <div class="ml-auto mt-md-3 mt-lg-0">
+                        <span class="opacity-7 text-muted"><i data-feather="wifi"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+
         <!-- Paket Berlangganan -->
         <div class="card border-right">
             <div class="card-body">
@@ -476,7 +505,7 @@
     <p>Anda belum login.</p>
 @endif --}}
 
-@if (Auth::check())
+{{-- @if (Auth::check())
 
     @if (strtolower(trim(Auth::user()->status_langganan)) === 'tidak aktif')
         <div class="alert alert-warning mt-4 elegant-alert">
@@ -485,8 +514,18 @@
                 Untuk mengaktifkan layanan kami, Anda perlu mendaftar paket berlangganan terlebih dahulu.
                 Klik tombol di bawah untuk memulai perjalanan Anda bersama kami.
             </p>
-            <a href="{{ url('/form/lokasi') }}" class="btn btn-secondary">Daftar Sekarang</a>
+            <a href="{{ route('user.form.lokasi') }}" class="btn btn-secondary">Daftar Sekarang</a>
         </div>
+
+    @elseif (strtolower(trim(Auth::user()->status_langganan)) === 'pending')
+        <div class="alert alert-info mt-4">
+            <h4 class="alert-title">Menunggu Persetujuan</h4>
+            <p class="alert-description">
+                Pendaftaran paket berlangganan Anda sedang diproses. Mohon tunggu hingga admin menyetujui permohonan Anda.
+                Anda akan menerima notifikasi setelah langganan Anda aktif.
+            </p>
+        </div>
+
     @elseif (strtolower(trim(Auth::user()->status_langganan)) === 'aktif')
         <div class="alert alert-success mt-4">
             <h4>Selamat!</h4>
@@ -530,7 +569,126 @@
 
 @else
     <p>Anda belum login.</p>
+@endif --}}
+
+@if (Auth::check())
+
+    @php
+        $status = strtolower(trim(Auth::user()->status_langganan));
+    @endphp
+
+    @if ($status === 'tidak aktif')
+        <div class="alert alert-warning mt-4 elegant-alert">
+            <h4 class="alert-title">Belum Berlangganan</h4>
+            <p class="alert-description">
+                Untuk mengaktifkan layanan kami, Anda perlu mendaftar paket berlangganan terlebih dahulu.
+                Klik tombol di bawah untuk memulai perjalanan Anda bersama kami.
+            </p>
+            <a href="{{ route('user.form.lokasi') }}" class="btn btn-secondary">Daftar Sekarang</a>
+        </div>
+
+    @elseif ($status === 'pending')
+        <div class="alert alert-info mt-4">
+            <h4 class="alert-title">Menunggu Persetujuan</h4>
+            <p class="alert-description">
+                Pendaftaran paket berlangganan Anda sedang diproses. Mohon tunggu hingga admin menyetujui permohonan Anda.
+                Anda akan menerima notifikasi setelah langganan Anda aktif.
+            </p>
+        </div>
+
+        @elseif ($status === 'disetujui')
+        <div class="alert alert-warning mt-4">
+            <h4 class="alert-title">Tagihan Belum Dibayar</h4>
+            <p class="alert-description">
+                Permohonan Anda telah disetujui. Silakan selesaikan pembayaran terlebih dahulu untuk mengaktifkan langganan Anda.
+            </p>
+        </div>
+
+        <div class="row">
+            <!-- Card Tagihan -->
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Tagihan Awal</h4>
+                        <div class="mt-2" style="height:100px; width:100%; text-align: center;">
+                            <h2 class="text-dark font-weight-medium">Belum Dibayar</h2>
+                            <span class="text-muted">Status Pembayaran</span>
+                        </div>
+                        <ul class="list-style-none mb-0">
+                            <li>
+                                <i class="fas fa-circle text-primary font-10 mr-2"></i>
+                                <span class="text-muted">Paket Langganan</span>
+                                {{-- <span class="text-dark float-right font-weight-medium">{{ Auth::user()->paket->nama_paket }}</span> --}}
+                                {{-- {{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? Auth::user()->pelanggan->paket->nama : 'Paket tidak tersedia' }} --}}
+
+                                <span class="text-dark float-right font-weight-medium">{{ Auth::user()->pelanggan ? Auth::user()->pelanggan->paket->nama_paket : 'Paket tidak tersedia' }}</span>
+                            </li>
+                            <li class="mt-3">
+                                <i class="fas fa-circle text-danger font-10 mr-2"></i>
+                                <span class="text-muted">Total Biaya</span>
+                                <span class="text-dark float-right font-weight-medium">Rp{{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? number_format(Auth::user()->pelanggan->paket->harga, 0, ',', '.') : 'Biaya tidak tersedia' }}
+
+
+</span>
+                            </li>
+                        </ul>
+
+                        <!-- Link ke halaman pembayaran -->
+                        <div class="text-center mt-4">
+                            <a href="{{ route('user.payment', Auth::user()->id) }}" class="btn btn-success">Bayar Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+       @elseif ($status === 'aktif')
+        <div class="alert alert-success mt-4">
+            <h4>Selamat!</h4>
+            <p>
+                Anda sudah berlangganan paket <strong>{{ Auth::user()->paket }}</strong> sejak {{ Auth::user()->tanggal_aktif }}.
+            </p>
+        </div>
+
+        <div class="row">
+            <!-- Tagihan Bulanan -->
+            <div class="col-lg-4 col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Tagihan Bulanan</h4>
+                        <div class="mt-2" style="height:100px; width:100%; text-align: center;">
+                            <h2 class="text-dark font-weight-medium">Lunas</h2>
+                            <span class="text-muted">Status Pembayaran</span>
+                        </div>
+                        <ul class="list-style-none mb-0">
+                            <li>
+                                <i class="fas fa-circle text-primary font-10 mr-2"></i>
+                                <span class="text-muted">Paket Langganan</span>
+                                <span class="text-dark float-right font-weight-medium">{{ Auth::user()->paket }}</span>
+                            </li>
+                            <li class="mt-3">
+                                <i class="fas fa-circle text-danger font-10 mr-2"></i>
+                                <span class="text-muted">Total Biaya Bulanan</span>
+                                <span class="text-dark float-right font-weight-medium">Rp{{ number_format(Auth::user()->biaya, 0, ',', '.') }}</span>
+                            </li>
+                            <li class="mt-3">
+                                <i class="fas fa-circle text-cyan font-10 mr-2"></i>
+                                <span class="text-muted">Pembayaran Terakhir</span>
+                                <span class="text-dark float-right font-weight-medium">{{ Auth::user()->tanggal_bayar_terakhir }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    @endif
+
+@else
+    <p>Anda belum login.</p>
 @endif
+
 
 
 {{-- @if (Auth::user()->status_langganan === 'Aktif')

@@ -2,13 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pelanggan; // Pastikan model Pelanggan sudah dibuat
+use App\Models\Pelanggan;
+use App\Models\Paket;
 
 class FormController extends Controller
 {
     public function step1()
     {
-        return view('form.lokasi');
+        return view('user.form.lokasi');
     }
 
     public function step2(Request $request)
@@ -17,16 +18,19 @@ class FormController extends Controller
         $request->validate([
             'lokasi_pemasangan' => 'required',
             'alamat_lengkap' => 'required',
+  'latitude' => 'required',
+        'longitude' => 'required'
         ]);
 
         session()->put('form_data', array_merge(session('form_data', []), $request->all()));
 
-        return redirect()->route('form.datadiri');
+        return redirect()->route('user.form.datadiri');
+
     }
 
     public function showStep2()
     {
-        return view('form.datadiri');
+        return view('user.form.datadiri');
     }
 
     public function step3(Request $request)
@@ -46,61 +50,88 @@ class FormController extends Controller
         session()->put('form_data', array_merge(session('form_data', []), $request->all()));
 
         // Arahkan ke halaman paket
-        return redirect()->route('form.paket');
+        return redirect()->route('user.form.paket');
+
     }
 
     public function showStep3()
     {
-        return view('form.paket');
+        $pakets = Paket::all();
+
+        // return view('user.form.paket');
+        return view('user.form.paket', compact('pakets'));
+
     }
+
+    // public function step4(Request $request)
+    // {
+    //     // Validasi data form step 3 (paket)
+    //     $request->validate([
+    //         'paket' => 'required',
+    //     ]);
+
+    //     // Simpan pilihan paket ke session
+    //     session()->put('paket_id', $request->paket);
+
+    //     // Arahkan ke halaman syarat dan ketentuan
+    //     return redirect()->route('user.form.syarat');
+
+    // }
 
     public function step4(Request $request)
     {
-        // Validasi data form step 3 (paket)
+        // Validasi inputan radio paket (pastikan ada)
         $request->validate([
-            'paket' => 'required',
+            'paket' => 'required|exists:pakets,id', // validasi apakah id paket valid
         ]);
 
-        // Simpan pilihan paket ke session
-        session()->put('paket', $request->paket);
+        // Simpan ke session dengan key paket_id (agar jelas)
+        session()->put('paket_id', $request->paket);
 
         // Arahkan ke halaman syarat dan ketentuan
-        return redirect()->route('form.syarat');
+        return redirect()->route('user.form.syarat');
     }
+
 
     public function showSyarat()
     {
-        return view('form.syarat');
+        return view('user.form.syarat');
     }
 
-    public function acceptSyarat(Request $request)
+       public function acceptSyarat(Request $request)
     {
-        // Pastikan pengguna mencentang checkbox syarat dan ketentuan
         $request->validate([
             'syarat' => 'accepted',
         ]);
 
-        // Simpan persetujuan di session
         session()->put('syarat', true);
 
-        // Gabungkan data form dengan pilihan paket dan simpan ke database
+        $user = auth()->user(); // Ambil user yang sedang login
+
+        // Gabungkan data form dengan pilihan paket dan set status menjadi "pending"
         $formData = array_merge(session('form_data', []), [
-            'paket' => session('paket'),
+            'paket_id' => session('paket_id'),
+            'status_langganan' => 'pending',
+            'user_id' => $user->id, // Simpan user_id untuk relasi
         ]);
 
-        // Simpan data ke database
-        Pelanggan::create($formData);
+        // Simpan data pelanggan baru
+        $pelanggan = Pelanggan::create($formData);
 
-        // Hapus data session setelah disimpan
+        // Perbarui status user di tabel users
+        $user->update(['status_langganan' => 'pending']);
+
         session()->forget('form_data');
         session()->forget('paket');
-        session()->forget('syarat'); // Hapus status persetujuan setelah data disimpan
+        session()->forget('syarat');
 
-        return redirect()->route('form.success');
+        return redirect()->route('user.form.success')->with('success', 'Permohonan langganan berhasil diajukan, menunggu persetujuan admin.');
     }
+
+
 
     public function success()
     {
-        return view('form.success');
-    }
+        return view('user.form.success');
+}
 }

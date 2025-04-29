@@ -13,6 +13,8 @@
 
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
@@ -23,6 +25,36 @@
     <link href="{{ asset('img/jjj.jpg') }}" rel="icon">
     <link href="{{ asset('img/jjj.jpg') }}" rel="apple-touch-icon">
 </head>
+<style>
+    .whatsapp-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        color: white;
+        background-color: #25D366;
+        border-radius: 8px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+
+    .whatsapp-button:hover {
+        background-color: #1DA851;
+    }
+
+    .whatsapp-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .container {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+</style>
+
 <body>
     <!-- SIDEBAR -->
     <section id="sidebar">
@@ -42,6 +74,12 @@
                 <a href="data">
                     <i class='bx bxs-group'></i>
                     <span class="text">Data Berlangganan</span>
+                </a>
+            </li>
+            <li>
+                <a href="data-pelanggan">
+                    <i class='bx bxs-group' ></i>
+                    <span class="text">Laporan Pelanggan</span>
                 </a>
             </li>
             <li>
@@ -73,6 +111,12 @@
                     <div class="modal-body">
                         Pilih "Keluar" di bawah jika Anda siap untuk mengakhiri sesi Anda saat ini.
                     </div>
+                    <form action="{{ route('admin.logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Logout</button>
+                    </form>
+                    <a class="btn btn-primary" href="{{ route('admin.logout') }}">Logout</a>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         <a class="btn btn-primary" href="logout.php">Logout</a>
@@ -89,7 +133,7 @@
         <nav>
             <i class='bx bx-menu'></i>
             <div class="notification-icon" style="position: relative; display: inline-block; left: 93%; margin-right: 20px;">
-                <a href="notification.php">
+                <a href="/admin/notifikasi">
                     <i class="bx bxs-bell" style="font-size: 24px;"></i> <!-- Lonceng -->
 
                     <span class="badge" style="position: absolute; top: -5px; right: -5px; background-color: red; color: white; border-radius: 50%; padding: 4px 8px; font-size: 12px;">
@@ -116,7 +160,7 @@
                     </div>
 
                     <div class="col-md-10">
-                        <form id="filter-form">
+                        {{-- <form id="filter-form">
                             <div class="filter-container">
                                 <!-- Filter by Date -->
                                 <div class="filter-group">
@@ -149,7 +193,42 @@
                                      <a href="data.php" class="btn btn-danger">Reset</a>
                                 </div>
                             </div>
+                        </form> --}}
+
+                        <form id="filter-form" method="GET" action="{{ route('pelanggan.data') }}">
+                            <div class="filter-container">
+                                <div class="filter-group">
+                                    <label for="date">Pertanggal:</label>
+                                    <input type="date" name="date" class="form-control" value="{{ request('date') }}">
+                                </div>
+
+                                <div class="filter-group">
+                                    <label for="month">Perbulan:</label>
+                                    <input type="month" name="month" class="form-control" value="{{ request('month') }}">
+                                </div>
+
+                                <div class="filter-group">
+                                    <label for="day_of_week">Perhari:</label>
+                                    <select name="day_of_week" class="form-control">
+                                        <option value="">Select Day</option>
+                                        <option value="1" {{ request('day_of_week') == 1 ? 'selected' : '' }}>Sunday</option>
+                                        <option value="2" {{ request('day_of_week') == 2 ? 'selected' : '' }}>Monday</option>
+                                        <option value="3" {{ request('day_of_week') == 3 ? 'selected' : '' }}>Tuesday</option>
+                                        <option value="4" {{ request('day_of_week') == 4 ? 'selected' : '' }}>Wednesday</option>
+                                        <option value="5" {{ request('day_of_week') == 5 ? 'selected' : '' }}>Thursday</option>
+                                        <option value="6" {{ request('day_of_week') == 6 ? 'selected' : '' }}>Friday</option>
+                                        <option value="7" {{ request('day_of_week') == 7 ? 'selected' : '' }}>Saturday</option>
+                                    </select>
+                                </div>
+
+                                <div class="button-group">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                    <a href="{{ route('pelanggan.data') }}" class="btn btn-danger">Reset</a>
+                                </div>
+                            </div>
                         </form>
+
+
                     </div>
                 </div>
             </div>
@@ -157,7 +236,7 @@
 
             <div class="table-responsive">
                 <div class="table-container">
-                    <table class="table table-bordered table-striped table-hover cihuy">
+                    <table class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -165,12 +244,7 @@
                                 <th>Email</th>
                                 <th>Lokasi pemasangan</th>
                                 <th>Paket</th>
-                                <th>NIK</th>
-                                <th>No handphone wa</th>
-                                <th>No handphone 2</th>
-                                <th>NPWP</th>
                                 <th>Alamat lengkap</th>
-                                <th>Sumber informasi</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Aksi</th>
                             </tr>
@@ -183,71 +257,73 @@
                                 <td>{{ $data->email }}</td>
                                 <td>{{ $data->lokasi_pemasangan }}</td>
                                 <td>{{ $data->paket }}</td>
-                                <td>{{ $data->nik }}</td>
-                                <td>{{ $data->no_handphone_wa }}</td>
-                                <td>{{ $data->no_handphone_2 }}</td>
-                                <td>{{ $data->npwp }}</td>
                                 <td>{{ $data->alamat_lengkap }}</td>
-                                <td>{{ $data->sumber_informasi }}</td>
-                                <td>{{ $data->tanggal_mulai }}</td>
+                                    {{-- <td>{{ $data->created_at }}</td> --}}
+                                <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M Y') }}</td>
+<td>
+    <button class="btn btn-primary btn-sm btn-detail" data-id="{{ $data->id_pelanggan }}">
+        Lihat Detail
+    </button>
+</td>
                             </tr>
                             @endforeach
                         </tbody>
-
                 </div>
-                <!-- Start modal hapus -->
-
-                <!-- finish modal hapus -->
-
-                <!-- Start modal ubah -->
-
-
-                <!-- finish modal ubah -->
-
-
-
                 </table>
-
-
-                <div class="d-flex justify-content-left mt-4 bawah">
-                    <button class="btn btn-success" type="button" id="downloadButtonId" style="margin-left: 20px;">
-                        <i class="bi bi-download"></i> Download as PDF
-                    </button>
-                    <button id="previewButtonId" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#pdfPreviewModal" style="margin-left: 40px;">
-                        <i class="bi bi-eye"></i> View PDF
-                    </button>
-                    <div aria-label="Page navigation" style="margin-left: 40px;">
-                        <ul class="pagination" id="pagination">
-
-                        </ul>
-                    </div>
-                </div>
-                <!-- Modal untuk preview PDF -->
-                <div class="modal fade" id="pdfPreviewModal" tabindex="-1" aria-labelledby="pdfPreviewModalLabel">
-                    <div class="modal-dialog modal-lg">
+                <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="pdfPreviewModalLabel">Preview PDF</h5>
+                                <h5 class="modal-title" id="modalLabel">Detail Pelanggan</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <iframe id="pdfPreviewIframe" width="100%" height="500px"></iframe>
+                            <div class="modal-body relative pb-10">
+                                <div class="space-y-2 text-gray-700">
+                                    <p><strong>Nama:</strong> <span id="detail-nama"></span></p>
+                                    <p><strong>Email:</strong> <span id="detail-email"></span></p>
+                                    <p><strong>Paket:</strong> <span id="detail-paket"></span></p>
+                                    <p><strong>Nik:</strong> <span id="detail-nik"></span></p>
+                                    <p><strong>No Handphone Wa:</strong> <span id="detail-no_handphone_wa"></span></p>
+                                    <p><strong>No Handphone 2:</strong> <span id="detail-no_handphone_2"></span></p>
+                                    <p><strong>Npwp:</strong> <span id="detail-npwp"></span></p>
+                                    <p><strong>Alamat Lengkap:</strong> <span id="detail-alamat_lengkap"></span></p>
+                                    <p><strong>Sumber Informasi:</strong> <span id="detail-sumber_informasi"></span></p>
+                                    <p class="mb-6"><strong>Lokasi Pemasangan:</strong> <span id="detail-lokasi"></span></p>
+                                </div>
+
+                                <!-- Elemen tanggal di kanan bawah -->
+                                <p class="absolute bottom-2 right-5 text-sm text-gray-500">
+                                    <strong>Tanggal Pemasangan:</strong> <span id="detail-created_at"></span>
+                                </p>
+
+                                <!-- Container Google Maps (Ditampilkan secara default) -->
+                                <div id="map-container" class="mt-5">
+                                    <h6 class="font-semibold">Lokasi Pemasangan:</h6>
+                                    {{-- <div id="map" class="w-full h-72 rounded-lg border"></div> --}}
+                                    <div id="map" style="width: 100%; height: 300px; border-radius: 10px;"></div>
+
+                                    <div class="container">
+                                        <a id="share-whatsapp"
+                                           href="#"
+                                           target="_blank"
+                                           class="whatsapp-button">
+                                            <i class="fa-brands fa-whatsapp"></i>
+                                            Share to WhatsApp
+                                        </a>
+                                    </div>
+
+
+                                </div>
+
+
                             </div>
+
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
-
-
 
                 <!-- start modal tambah -->
                 <div class="modal fade" id="modalTambah" data-bs-keyboard="false"
@@ -260,7 +336,7 @@
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form action="{{ route('admin.store') }}" method="POST">
+                            <form action="{{ route('pelanggan.store') }}" method="POST">
                                 @csrf
 
                                 <div class="modal-body">
@@ -620,7 +696,122 @@ document.getElementById("downloadButtonId").addEventListener("click", generatePD
 </body>
 
 </html>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEPgITzScR5cR1Omqp7BFe8tww8G2qOt4&libraries=places" async defer></script>
+
+<script>
+    $(document).ready(function () {
+        $('.btn-detail').click(function () {
+            let id = $(this).data('id'); // Ambil ID pelanggan dari tombol
+
+            $.ajax({
+                url: `/admin/dashboard/detail/${id}`, // Panggil route
+                type: 'GET',
+                success: function (response) {
+                    // Isi modal dengan data yang didapat
+                    $('#detail-nama').text(response.nama_pelanggan);
+                    $('#detail-email').text(response.email);
+                    $('#detail-paket').text(response.paket);
+                    $('#detail-nik').text(response.nik);
+                    $('#detail-no_handphone_wa').text(response.no_handphone_wa);
+                    $('#detail-no_handphone_2').text(response.no_handphone_2);
+                    $('#detail-npwp').text(response.npwp);
+                    $('#detail-alamat_lengkap').text(response.alamat_lengkap);
+                    $('#detail-sumber_informasi').text(response.sumber_informasi);
+                    $('#detail-lokasi').text(response.lokasi_pemasangan);
+                    $('#detail-created_at').text(response.created_at);
+
+   // Periksa apakah latitude & longitude tersedia
+   if (response.latitude && response.longitude) {
+                        initMap(response.latitude, response.longitude);
+                        $('#map-container').show(); // Tampilkan peta
+
+                        // Perbarui link WhatsApp setelah mendapatkan lokasi
+                        const message = `Lokasi Pemasangan: https://www.google.com/maps?q=${response.latitude},${response.longitude}`;
+                        $('#share-whatsapp').attr('href', `https://wa.me/?text=${encodeURIComponent(message)}`);
+                    } else {
+                        $('#map-container').hide(); // Sembunyikan jika tidak ada lokasi
+                        $('#share-whatsapp').attr('href', "#"); // Kosongkan link jika tidak ada lokasi
+                    }
+
+                    // Tampilkan modal
+                    $('#detailModal').modal('show');
+                },
+                error: function () {
+                    alert('Gagal mengambil data pelanggan');
+                }
+            });
+        });
+    });
+
+    function initMap(lat, lng) {
+        var lokasi = { lat: parseFloat(lat), lng: parseFloat(lng) };
+        var map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: lokasi
+        });
+
+        var marker = new google.maps.Marker({
+            position: lokasi,
+            map: map
+        });
+    }
+</script>
+
 {{-- <script>
+    $(document).ready(function () {
+        $('.btn-detail').click(function () {
+            let id = $(this).data('id'); // Ambil ID pelanggan dari tombol
+
+            $.ajax({
+                url: `/admin/dashboard/detail/${id}`, // Panggil route
+                type: 'GET',
+                success: function (response) {
+                    // Isi modal dengan data yang didapat
+                    $('#detail-nama').text(response.nama_pelanggan);
+                    $('#detail-email').text(response.email);
+                    $('#detail-paket').text(response.paket);
+                    $('#detail-lokasi').text(response.lokasi_pemasangan);
+                    $('#detail-created_at').text(response.created_at);
+
+                    // Periksa apakah latitude & longitude tersedia
+                    if (response.latitude && response.longitude) {
+                        initMap(response.latitude, response.longitude);
+                        $('#map-container').show(); // Tampilkan peta
+
+                        // Perbarui link WhatsApp setelah mendapatkan lokasi
+                        const message = `Lokasi Pemasangan: https://www.google.com/maps?q=${response.latitude},${response.longitude}`;
+                        $('#share-whatsapp').attr('href', `https://wa.me/?text=${encodeURIComponent(message)}`);
+                    } else {
+                        $('#map-container').hide(); // Sembunyikan jika tidak ada lokasi
+                        $('#share-whatsapp').attr('href', "#"); // Kosongkan link jika tidak ada lokasi
+                    }
+
+                    // Tampilkan modal
+                    $('#detailModal').modal('show');
+                },
+                error: function () {
+                    alert('Gagal mengambil data pelanggan');
+                }
+            });
+        });
+    });
+
+    function initMap(lat, lng) {
+        var lokasi = { lat: parseFloat(lat), lng: parseFloat(lng) };
+        var map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: lokasi
+        });
+
+        var marker = new google.maps.Marker({
+            position: lokasi,
+            map: map
+        });
+    }
+</script> --}}
+
+<script>
 document.querySelector('.bx-menu').addEventListener('click', function() {
     document.getElementById('sidebar').classList.toggle('active');
 });
@@ -639,4 +830,4 @@ window.addEventListener('resize', function() {
         document.getElementById('sidebar').classList.remove('active');
     }
 });
-</script> --}}
+</script>

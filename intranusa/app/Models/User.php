@@ -12,9 +12,16 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'username', 'nik', 'npwp', 'password','status_langganan', 'profile_picture'
+        'username', 'password','status_langganan', 'profile_picture'
 , 'role'
     ];
+// Model User.php
+// Model User.php
+public function pelanggan()
+{
+    return $this->hasOne(Pelanggan::class);
+}
+
 
     protected $hidden = [
         'password',

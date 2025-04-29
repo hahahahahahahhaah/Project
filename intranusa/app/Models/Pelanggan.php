@@ -8,20 +8,46 @@ use Illuminate\Database\Eloquent\Model;
 class Pelanggan extends Model
 {
     use HasFactory;
+
     protected $table = 'pelanggan';
+    protected $primaryKey = 'id_pelanggan';
+
     protected $fillable = [
+        'user_id', // Tambahkan user_id
         'nama_pelanggan',
         'email',
         'lokasi_pemasangan',
-        'paket',
+  'latitude',
+        'longitude',
+        // 'paket',
         'nik',
         'no_handphone_wa',
         'no_handphone_2',
         'npwp',
         'alamat_lengkap',
         'sumber_informasi',
+        'status_langganan',
+        'paket_id',
+        'status_notif',
     ];
-    protected $attributes = [
-        'status_notif' => 'pending', // Nilai default
-    ];
+
+    // Relasi ke model User (Opsional)
+    // public function user()
+    // {
+    //     return $this->belongsTo(User::class, 'user_id');
+    // }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function paket()
+    {
+        return $this->belongsTo(Paket::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }

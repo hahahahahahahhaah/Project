@@ -24,8 +24,9 @@
                 <h1>Create Account</h1>
                 <span>Register</span>
                 <input type="text" name="username" placeholder="Name" required>
-                <input type="text" name="nik" placeholder="Enter NIK" required>
-                <input type="text" name="npwp" placeholder="Enter NPWP" required>
+                <input type="text" name="password" placeholder="Password" required>
+                {{-- <input type="text" name="nik" placeholder="Enter NIK" required>
+                <input type="text" name="npwp" placeholder="Enter NPWP" required> --}}
                 <button type="submit">Daftar</button>
             </form>
         </div>
@@ -35,9 +36,9 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <h1>Sign In</h1>
-                <span>Login With NIK & NPWP</span>
-                <input type="text" name="nik" placeholder="Enter NIK" required>
-                <input type="text" name="npwp" placeholder="Enter NPWP" required>
+                <span>Login With Name & Password</span>
+                <input type="text" name="username" placeholder="Name" required>
+                <input type="text" name="password" placeholder="Password" required>
                 <button type="submit">Masuk</button>
             </form>
         </div>
