@@ -10,7 +10,7 @@ class Pelanggan extends Model
     use HasFactory;
 
     protected $table = 'pelanggan';
-    protected $primaryKey = 'id_pelanggan';
+    protected $primaryKey = 'pelanggan_id';
 
     protected $fillable = [
         'user_id', // Tambahkan user_id
@@ -47,7 +47,8 @@ class Pelanggan extends Model
     }
     public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class, 'pelanggan_id');  // Pastikan kolom relasi yang benar
     }
+
 
 }

@@ -50,11 +50,11 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Berlangganan - Datadiri</title>
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="icon">
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
-    <link rel="stylesheet" href="{{ asset('asset/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('style1.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/bootstrap/css/bootstrap.min.css') }}">
+    <link href="{{ secure_asset('asset/img/jjj.jpg') }}" rel="icon">
+    <link href="{{ secure_asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
+    <link rel="stylesheet" href="{{ secure_asset('asset/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('style1.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('asset/bootstrap/css/bootstrap.min.css') }}">
     <style>
         /* Mengatur tampilan section multistep */
         .steps {
@@ -200,7 +200,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 mb-2 d-flex align-items-center justify-content-center">
-                <img src="{{ asset('asset/img/lloo.png') }}" alt="Intranusa.id" width="300" height="300"/>
+                <img src="{{ secure_asset('asset/img/lloo.png') }}" alt="Intranusa.id" width="300" height="300"/>
             </div>
         </div>
 
@@ -300,12 +300,12 @@
     </div>
 </section>
 
-<script src="{{ asset('asset/dist/adminlte.min.js') }}"></script>
-<script src="{{ asset('asset/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('asset/js/popper.js') }}"></script>
-<script src="{{ asset('asset/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('asset/js/main.js') }}"></script>
-<script defer src="{{ asset('asset/js/beacon.min.js') }}"></script>
+<script src="{{ secure_asset('asset/dist/adminlte.min.js') }}"></script>
+<script src="{{ secure_asset('asset/jquery/jquery.min.js') }}"></script>
+<script src="{{ secure_asset('asset/js/popper.js') }}"></script>
+<script src="{{ secure_asset('asset/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ secure_asset('asset/js/main.js') }}"></script>
+<script defer src="{{ secure_asset('asset/js/beacon.min.js') }}"></script>
 <script type="text/javascript">
     function goToPaket() {
         window.location.href = '{{ url('paket') }}';

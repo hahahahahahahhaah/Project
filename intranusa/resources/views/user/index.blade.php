@@ -9,17 +9,17 @@
     <meta name="author" content="">
 
     <!-- Favicon icon -->
-    <link rel="icon" type="image/jpg" sizes="16x16" href="{{ asset('img/jjj.jpg') }}">
+    <link rel="icon" type="image/jpg" sizes="16x16" href="{{ secure_asset('img/jjj.jpg') }}">
 
     <title>intranusa.id</title>
 
     <!-- Custom CSS -->
-    <link href="{{ asset('assets1/extra-libs/c3/c3.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets1/libs/chartist/dist/chartist.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets1/extra-libs/jvector/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
+    <link href="{{ secure_asset('assets1/extra-libs/c3/c3.min.css') }}" rel="stylesheet">
+    <link href="{{ secure_asset('assets1/libs/chartist/dist/chartist.min.css') }}" rel="stylesheet">
+    <link href="{{ secure_asset('assets1/extra-libs/jvector/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
 
     <!-- Custom Style -->
-    <link href="{{ asset('dist/css/style.min.css') }}" rel="stylesheet">
+    <link href="{{  secure_asset('dist/css/style.min.css') }}" rel="stylesheet">
 
     <style type="text/css">
         .elegant-alert {
@@ -175,17 +175,17 @@
                         <!-- Logo icon -->
                         <a href="index.php">
                             <b class="logo-icon">
-                                <img src="{{ asset('assets1/images/usstwo.png') }}" alt="homepage" class="dark-logo" />
+                                <img src="{{ secure_asset('assets1/images/usstwo.png') }}" alt="homepage" class="dark-logo" />
                                 <!-- Light Logo icon -->
-                                <img src="{{ asset('assets1/images/usstwo.png') }}" alt="homepage" class="light-logo" />
+                                <img src="{{ secure_asset('assets1/images/usstwo.png') }}" alt="homepage" class="light-logo" />
                             </b>
                             <!--End Logo icon -->
                             <!-- Logo text -->
                             <span class="logo-text">
                                 <!-- Dark Logo text -->
-            <img src="{{ asset('assets1/images/gege.png') }}" alt="homepage" class="dark-logo" />
+            <img src="{{ secure_asset('assets1/images/gege.png') }}" alt="homepage" class="dark-logo" />
             <!-- Light Logo text -->
-            <img src="{{ asset('assets1/images/gege.png') }}" class="light-logo" alt="homepage" />
+            <img src="{{ secure_asset('assets1/images/gege.png') }}" class="light-logo" alt="homepage" />
                             </span>
                         </a>
                     </div>
@@ -450,12 +450,17 @@
                 <div class="d-flex d-lg-flex d-md-block align-items-center">
                     <div>
                         <h2 class="text-dark mb-1 w-100 text-truncate font-weight-medium">
-                            {{Auth::user()->status_langganan === 'Aktif'}}
+                            {{-- {{Auth::user()->status_langganan === 'Aktif'}} --}}
+                            {{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? Auth::user()->pelanggan->paket->nama_paket : 'Paket tidak tersedia' }}
                         </h2>
                         <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Paket berlangganan</h6>
                     </div>
                     <div class="ml-auto mt-md-3 mt-lg-0">
-                        <span class="opacity-7 text-muted"><i data-feather="wifi"></i></span>
+                        <span class="opacity-7 text-muted">
+                                    {{-- {{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? Auth::user()->pelanggan->paket->nama_paket : 'Paket tidak tersedia' }} --}}
+                                    <i data-feather="wifi"></i>
+
+                        </span>
                     </div>
                 </div>
             </div>
@@ -467,13 +472,17 @@
                     <div>
                         <div class="d-inline-flex align-items-center">
                             <h2 class="text-dark mb-1 font-weight-medium">
-                                {{Auth::user()->status_langganan === 'Aktif'}}
+                                {{ Auth::user()->pelanggan ? Auth::user()->pelanggan->created_at->format('d M Y') : 'Tanggal tidak tersedia' }}
+
                             </h2>
                         </div>
                         <h6 class="text-muted font-weight-normal mb-0 w-100 text-truncate">Mulai berlangganan</h6>
                     </div>
                     <div class="ml-auto mt-md-3 mt-lg-0">
-                        <span class="opacity-7 text-muted"><i data-feather="calendar"></i></span>
+                        <span class="opacity-7 text-muted">
+
+                            <i data-feather="calendar"></i>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -505,7 +514,7 @@
     <p>Anda belum login.</p>
 @endif --}}
 
-{{-- @if (Auth::check())
+@if (Auth::check())
 
     @if (strtolower(trim(Auth::user()->status_langganan)) === 'tidak aktif')
         <div class="alert alert-warning mt-4 elegant-alert">
@@ -569,15 +578,18 @@
 
 @else
     <p>Anda belum login.</p>
-@endif --}}
+@endif
+
+
+
 
 @if (Auth::check())
 
     @php
-        $status = strtolower(trim(Auth::user()->status_langganan));
+        $status = strtolower(trim(Auth::user()->pelanggan->status_langganan ?? ''));
     @endphp
 
-    @if ($status === 'tidak aktif')
+    @if ($status === 'Tidak aktif')
         <div class="alert alert-warning mt-4 elegant-alert">
             <h4 class="alert-title">Belum Berlangganan</h4>
             <p class="alert-description">
@@ -596,7 +608,7 @@
             </p>
         </div>
 
-        @elseif ($status === 'disetujui')
+    @elseif ($status === 'disetujui')
         <div class="alert alert-warning mt-4">
             <h4 class="alert-title">Tagihan Belum Dibayar</h4>
             <p class="alert-description">
@@ -618,18 +630,16 @@
                             <li>
                                 <i class="fas fa-circle text-primary font-10 mr-2"></i>
                                 <span class="text-muted">Paket Langganan</span>
-                                {{-- <span class="text-dark float-right font-weight-medium">{{ Auth::user()->paket->nama_paket }}</span> --}}
-                                {{-- {{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? Auth::user()->pelanggan->paket->nama : 'Paket tidak tersedia' }} --}}
-
-                                <span class="text-dark float-right font-weight-medium">{{ Auth::user()->pelanggan ? Auth::user()->pelanggan->paket->nama_paket : 'Paket tidak tersedia' }}</span>
+                                <span class="text-dark float-right font-weight-medium">
+                                    {{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? Auth::user()->pelanggan->paket->nama_paket : 'Paket tidak tersedia' }}
+                                </span>
                             </li>
                             <li class="mt-3">
                                 <i class="fas fa-circle text-danger font-10 mr-2"></i>
                                 <span class="text-muted">Total Biaya</span>
-                                <span class="text-dark float-right font-weight-medium">Rp{{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? number_format(Auth::user()->pelanggan->paket->harga, 0, ',', '.') : 'Biaya tidak tersedia' }}
-
-
-</span>
+                                <span class="text-dark float-right font-weight-medium">
+                                    Rp{{ Auth::user()->pelanggan && Auth::user()->pelanggan->paket ? number_format(Auth::user()->pelanggan->paket->harga, 0, ',', '.') : 'Biaya tidak tersedia' }}
+                                </span>
                             </li>
                         </ul>
 
@@ -642,12 +652,11 @@
             </div>
         </div>
 
-
-       @elseif ($status === 'aktif')
+    @elseif ($status === 'aktif')
         <div class="alert alert-success mt-4">
             <h4>Selamat!</h4>
             <p>
-                Anda sudah berlangganan paket <strong>{{ Auth::user()->paket }}</strong> sejak {{ Auth::user()->tanggal_aktif }}.
+                Anda sudah berlangganan paket <strong>{{ Auth::user()->pelanggan->paket->nama_paket ?? '-' }}</strong> sejak {{ Auth::user()->pelanggan->tanggal_aktif ?? '-' }}.
             </p>
         </div>
 
@@ -665,17 +674,23 @@
                             <li>
                                 <i class="fas fa-circle text-primary font-10 mr-2"></i>
                                 <span class="text-muted">Paket Langganan</span>
-                                <span class="text-dark float-right font-weight-medium">{{ Auth::user()->paket }}</span>
+                                <span class="text-dark float-right font-weight-medium">
+                                    {{ Auth::user()->pelanggan->paket->nama_paket ?? '-' }}
+                                </span>
                             </li>
                             <li class="mt-3">
                                 <i class="fas fa-circle text-danger font-10 mr-2"></i>
                                 <span class="text-muted">Total Biaya Bulanan</span>
-                                <span class="text-dark float-right font-weight-medium">Rp{{ number_format(Auth::user()->biaya, 0, ',', '.') }}</span>
+                                <span class="text-dark float-right font-weight-medium">
+                                    Rp{{ Auth::user()->pelanggan->paket ? number_format(Auth::user()->pelanggan->paket->harga, 0, ',', '.') : '-' }}
+                                </span>
                             </li>
                             <li class="mt-3">
                                 <i class="fas fa-circle text-cyan font-10 mr-2"></i>
                                 <span class="text-muted">Pembayaran Terakhir</span>
-                                <span class="text-dark float-right font-weight-medium">{{ Auth::user()->tanggal_bayar_terakhir }}</span>
+                                <span class="text-dark float-right font-weight-medium">
+                                    {{ Auth::user()->pelanggan->tanggal_bayar_terakhir ?? '-' }}
+                                </span>
                             </li>
                         </ul>
                     </div>
@@ -683,6 +698,40 @@
             </div>
         </div>
 
+        @elseif ($status === 'non-aktif')
+        <div class="alert alert-danger mt-4">
+            <h4 class="alert-title">Langganan Dinonaktifkan</h4>
+            <p class="alert-description">
+                Langganan Anda telah dinonaktifkan karena menunggak pembayaran bulanan. Silakan selesaikan pembayaran agar layanan Anda kembali aktif.
+            </p>
+
+            <ul class="list-style-none mb-3">
+                <li>
+                    <i class="fas fa-circle text-primary font-10 mr-2"></i>
+                    <span class="text-muted">Paket Langganan</span>
+                    <span class="text-dark float-right font-weight-medium">
+                        {{ Auth::user()->pelanggan->paket->nama_paket ?? '-' }}
+                    </span>
+                </li>
+                <li class="mt-2">
+                    <i class="fas fa-circle text-danger font-10 mr-2"></i>
+                    <span class="text-muted">Tagihan Bulanan</span>
+                    <span class="text-dark float-right font-weight-medium">
+                        Rp{{ Auth::user()->pelanggan->paket ? number_format(Auth::user()->pelanggan->paket->harga, 0, ',', '.') : '-' }}
+                    </span>
+                </li>
+            </ul>
+
+            <div class="text-center">
+                <a href="{{ route('user.tagihan', Auth::user()->id) }}" class="btn btn-danger">
+                    Bayar Sekarang
+                </a>
+            </div>
+        </div>
+
+        <div class="alert alert-secondary mt-4">
+            <p>Status langganan tidak diketahui.</p>
+        </div>
     @endif
 
 @else
@@ -744,25 +793,22 @@
 
         </div>
     </div>
-    <script src="../assets1/libs/jquery/dist/jquery.min.js"></script>
-    <script src="../assets1/libs/popper.js/dist/umd/popper.min.js"></script>
-    <script src="../assets1/libs/bootstrap/dist/js/bootstrap.min.js"></script>
-    <!-- apps -->
-    <!-- apps -->
-    <script src="../dist/js/app-style-switcher.js"></script>
-    <script src="../dist/js/feather.min.js"></script>
-    <script src="../assets1/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
-    <script src="../dist/js/sidebarmenu.js"></script>
-    <!--Custom JavaScript -->
-    <script src="../dist/js/custom.min.js"></script>
-    <!--This page JavaScript -->
-    <script src="../assets1/extra-libs/c3/d3.min.js"></script>
-    <script src="../assets1/extra-libs/c3/c3.min.js"></script>
-    <script src="../assets1/libs/chartist/dist/chartist.min.js"></script>
-    <script src="../assets1/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
-    <script src="../assets1/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js"></script>
-    <script src="../assets1/extra-libs/jvector/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="../dist/js/pages/dashboards/dashboard1.min.js"></script>
+    <script src="{{ secure_asset('assets1/libs/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/libs/popper.js/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ secure_asset('dist/js/app-style-switcher.js') }}"></script>
+    <script src="{{ secure_asset('dist/js/feather.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
+    <script src="{{ secure_asset('dist/js/sidebarmenu.js') }}"></script>
+    <script src="{{ secure_asset('dist/js/custom.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/extra-libs/c3/d3.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/extra-libs/c3/c3.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/libs/chartist/dist/chartist.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/libs/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/extra-libs/jvector/jquery-jvectormap-2.0.2.min.js') }}"></script>
+    <script src="{{ secure_asset('assets1/extra-libs/jvector/jquery-jvectormap-world-mill-en.js') }}"></script>
+    <script src="{{ secure_asset('dist/js/pages/dashboards/dashboard1.min.js') }}"></script>
+
     <script type="text/javascript">
         // Function to open modal
     function openLogoutModal() {

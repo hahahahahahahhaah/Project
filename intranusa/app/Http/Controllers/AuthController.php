@@ -16,6 +16,8 @@ class AuthController extends Controller
     {
         $request->validate([
             'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
+            'telp' => 'required|string|max:15|unique:users',
             // 'nik' => 'required|string|max:16|unique:users',
             // 'npwp' => 'required|string|max:15|unique:users',
             'status_langganan' => 'nullable|in:Aktif,Tidak Aktif',
@@ -24,8 +26,8 @@ class AuthController extends Controller
 
         $user = User::create([
             'username' => $request->username,
-            // 'nik' => $request->nik,
-            // 'npwp' => $request->npwp,
+            'email' => $request->email,
+            'telp' => $request->telp,
             'password' => $request->password ? Hash::make($request->password) : null,
             'status_langganan' => $request->status_langganan ?? 'Tidak Aktif', // Default "Tidak Aktif"
             'role' => 'user',

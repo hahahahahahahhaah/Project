@@ -9,15 +9,17 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'paket_id',
-        'id_pelanggan', // kalau memang ada dan dipakai
+        'order_id',
+        'pelanggan_id', // kalau memang ada dan dipakai
         'total_price',
         'status',
     ];
 
     public function pelanggan()
     {
-        return $this->belongsTo(Pelanggan::class);
+        return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);

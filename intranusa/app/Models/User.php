@@ -22,6 +22,11 @@ public function pelanggan()
     return $this->hasOne(Pelanggan::class);
 }
 
+// app/Models/User.php
+public function gangguans()
+{
+    return $this->hasMany(Gangguan::class);
+}
 
     protected $hidden = [
         'password',

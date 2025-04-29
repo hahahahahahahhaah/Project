@@ -123,11 +123,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar berlangganan - paket</title>
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="icon">
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
-    <link rel="stylesheet" href="{{ asset('asset/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('style1.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/bootstrap/css/bootstrap.min.css') }}">
+    <link href="{{  secure_asset('asset/img/jjj.jpg') }}" rel="icon">
+    <link href="{{  secure_asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
+    <link rel="stylesheet" href="{{  secure_asset('asset/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{  secure_asset('style1.css') }}">
+    <link rel="stylesheet" href="{{  secure_asset('asset/bootstrap/css/bootstrap.min.css') }}">
     <style>
         /* Mengatur tampilan section multistep */
        .steps {
@@ -387,12 +387,12 @@
     </div>
 </section>
 
-<script src="{{ asset('asset/dist/adminlte.min.js') }}"></script>
-<script src="{{ asset('asset/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('asset/js/popper.js') }}"></script>
-<script src="{{ asset('asset/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('asset/js/main.js') }}"></script>
-<script defer src="{{ asset('asset/js/beacon.min.js') }}"></script>
+<script src="{{  secure_asset('asset/dist/adminlte.min.js') }}"></script>
+<script src="{{  secure_asset('asset/jquery/jquery.min.js') }}"></script>
+<script src="{{  secure_asset('asset/js/popper.js') }}"></script>
+<script src="{{  secure_asset('asset/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{  secure_asset('asset/js/main.js') }}"></script>
+<script defer src="{{  secure_asset('asset/js/beacon.min.js') }}"></script>
 <script>
     function validateForm() {
         if (!$("input[name='paket']:checked").val()) {

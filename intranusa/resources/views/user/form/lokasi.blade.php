@@ -24,11 +24,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar Berlangganan - Lokasi Pemasangan</title>
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="icon">
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
-    <link rel="stylesheet" href="{{ asset('asset/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('style1.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/bootstrap/css/bootstrap.min.css') }}">
+    <link href="{{ secure_asset('asset/img/jjj.jpg') }}" rel="icon">
+    <link href="{{ secure_asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
+    <link rel="stylesheet" href="{{ secure_asset('asset/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('style1.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('asset/bootstrap/css/bootstrap.min.css') }}">
 
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAEPgITzScR5cR1Omqp7BFe8tww8G2qOt4&libraries=places"></script>
 
@@ -67,14 +67,14 @@
     <div class="container">
         <!-- Logo Container -->
         <div class="logo-container">
-            <img src="{{ asset('asset/img/lloo.png') }}" alt="Intranusa.id" width="250" height="250"/>
+            <img src="{{ secure_asset('asset/img/lloo.png') }}" alt="Intranusa.id" width="250" height="250"/>
         </div>
 
         <div class="row justify-content-center form-container">
             <div class="col-md-7 col-lg-5">
                 <div class="wrap">
                     <div class="img-container">
-                        <img src="{{ asset('asset/img/login1.jpg') }}" alt="Background Image">
+                        <img src="{{ secure_asset('asset/img/login1.jpg') }}" alt="Background Image">
                     </div>
                     <div class="login-wrap p-4 p-md-5">
                         <div class="d-flex">
@@ -174,12 +174,12 @@
         </div>
     </div>
 
-    <script src="{{ asset('asset/dist/adminlte.min.js') }}"></script>
-    <script src="{{ asset('asset/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('asset/js/popper.js') }}"></script>
-    <script src="{{ asset('asset/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('asset/js/main.js') }}"></script>
-    <script defer src="{{ asset('asset/js/beacon.min.js') }}"></script>
+    <script src="{{ secure_asset('asset/dist/adminlte.min.js') }}"></script>
+    <script src="{{ secure_asset('asset/jquery/jquery.min.js') }}"></script>
+    <script src="{{ secure_asset('asset/js/popper.js') }}"></script>
+    <script src="{{ secure_asset('asset/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ secure_asset('asset/js/main.js') }}"></script>
+    <script defer src="{{ secure_asset('asset/js/beacon.min.js') }}"></script>
 
        {{-- <script>
 

@@ -9,6 +9,78 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PDFController;
 
+use App\Http\Controllers\TagihanController;
+
+
+use App\Http\Controllers\GangguanController;
+use App\Http\Controllers\QnaController;
+use App\Http\Controllers\FeedbackController;
+
+
+use App\Http\Controllers\SubscriptionController;
+
+// User membuka halaman berhenti langganan
+Route::get('/user/berhenti-berlangganan', [SubscriptionController::class, 'cancelSubscriptionView'])->middleware('auth');
+
+// User submit pembatalan langganan
+Route::post('/user/berhenti-berlangganan', [SubscriptionController::class, 'cancelSubscription'])->name('cancel.subscription')->middleware('auth');
+
+// // Admin lihat daftar permintaan pembatalan
+// Route::get('/admin/berhenti-berlangganan', [SubscriptionController::class, 'showPendingCancellations'])->middleware('auth');
+
+// // Admin setujui atau tolak pembatalan
+// Route::post('/admin/berhenti-berlangganan/{userId}/{status}', [SubscriptionController::class, 'approveCancelSubscription'])->name('admin.approve.cancel')->middleware('auth');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/berhenti-berlangganan', [SubscriptionController::class, 'showPendingCancellations']);
+    Route::post('/admin/approve-cancel/{userId}/{status}', [SubscriptionController::class, 'approveCancelSubscription']);
+});
+
+
+Route::post('/chatbot/respond', [QnaController::class, 'respond'])->name('chatbot.respond');
+
+Route::get('/feedback', [FeedbackController::class, 'create'])->name('feedback.create');
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+
+Route::middleware(['auth'])->group(function () {
+    // Halaman untuk admin melihat semua laporan gangguan
+    Route::get('/admin/gangguan', [GangguanController::class, 'index'])->name('gangguan.index')->middleware('role:admin');
+
+    // Halaman untuk user membuat laporan gangguan
+    Route::get('/gangguan/create', [GangguanController::class, 'create'])->name('gangguan.create');
+    Route::post('/gangguan', [GangguanController::class, 'store'])->name('gangguan.store');
+
+    Route::get('/gangguan/{id}', [GangguanController::class, 'show'])->name('gangguan.show');
+    Route::post('/gangguan/{id}/update-status', [GangguanController::class, 'updateStatus'])->name('gangguan.updateStatus');
+
+});
+
+// Route::get('/admin/gangguan', [GangguanController::class, 'index'])->name('gangguan.index')->middleware('role:admin');
+Route::get('/gangguan', [GangguanController::class, 'index'])->name('gangguan.index');
+
+Route::get('/lapor-gangguan', [GangguanController::class, 'create'])->name('gangguan.create');
+Route::post('/lapor-gangguan', [GangguanController::class, 'store'])->name('gangguan.store');
+
+// Halaman pembayaran
+Route::get('/pay/{order}', [TagihanController::class, 'pay'])->name('user.tagihan');
+
+// Callback dari Midtrans (POST dari server Midtrans)
+Route::post('/midtrans/callback', [TagihanController::class, 'midtransCallback'])->name('midtrans.callback');
+
+// (Opsional) Halaman setelah sukses bayar
+Route::view('/payment-success', 'payment.success')->name('payment.success');
+
+
+
+// Route::get('/tagihan', [App\Http\Controllers\OrderController::class, 'index'])->name('tagihan.index');
+// Route::get('/tagihan', [OrderController::class, 'index']);
+// use App\Http\Controllers\TagihanController;
+
+// Route::middleware('auth')->prefix('user')->group(function () {
+//     Route::get('/tagihan', [TagihanController::class, 'index'])->name('user.tagihan.index');
+// });
+
+
 
 use Illuminate\Http\Request;
 use App\Models\Transaction; // Ganti model sesuai nama
@@ -68,13 +140,18 @@ use App\Http\Controllers\PelangganController;
     // Route::post('/data', [PelangganController::class, 'store'])->name('admin.store');
     Route::get('/admin/data-pelanggan', [AdminController::class, 'data_laporan'])->name('admin.data_laporan');
 
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/admin/data', [PelangganController::class, 'data'])->name('pelanggan.data');
+        Route::post('/data', [PelangganController::class, 'store'])->name('pelanggan.store');
+        // Route::get('/data/detail/{id}', [AdminController::class, 'getDetail'])->name('admin.data.detail');
+    });
+    Route::get('/data/detail/{id}', [AdminController::class, 'getDetail'])->name('admin.data.detail');
 
+    // Route::get('/data/detail/{id}', [AdminController::class, 'getDetail'])->name('admin.data.detail');
+    // Route::get('/data/detail/{id}', [AdminController::class, 'getDetail'])->name('admin.data.detail');
 
     // Route::get('/data', [PelangganController::class, 'data'])->name('pelanggan.data');
-    Route::get('/data', [PelangganController::class, 'data'])->name('pelanggan.data');
-    Route::post('/data', [PelangganController::class, 'store'])->name('pelanggan.store');
-    Route::get('/data/detail/{id}', [AdminController::class, 'getDetail'])->name('admin.data.detail');
-    Route::get('/data/detail/{id}', [AdminController::class, 'getDetail'])->name('admin.data.detail');
+    // Route::get('/data', [PelangganController::class, 'data'])->name('pelanggan.data');
 
 // Route::get('/form/lokasi', [FormController::class, 'step1']);
 // Route::post('/form/datadiri', [FormController::class, 'step2']);
@@ -177,10 +254,16 @@ Route::middleware(['auth', RoleMiddleware::class])->prefix('admin')->group(funct
     Route::get('/laporan', function () {
         return view('admin.laporan');
     });
-    Route::get('/data', [AdminController::class, 'data'])->name('admin.data');
-    Route::get('/survei', function () {
-        return view('admin.survei');
-    })->name('admin.survei');
+
+    Route::resource('qna', \App\Http\Controllers\QnaController::class)->names('admin.qna');
+
+    Route::get('/survei', [FeedbackController::class, 'index'])->name('admin.feedback');
+    Route::get('/export-feedback', [FeedbackController::class, 'exportPdf'])->name('feedback.exportPdf');
+
+    // Route::get('/data', [AdminController::class, 'data'])->name('admin.data');
+    // Route::get('/survei', function () {
+    //     return view('admin.survei');
+    // })->name('admin.survei');
 });
 
 
@@ -209,16 +292,13 @@ Route::middleware(['auth', RoleMiddleware::class])->prefix('admin')->group(funct
 
 // Halaman pembayaran untuk user
 Route::get('/user/payment', [PaymentController::class, 'showPaymentPage'])->name('user.payment');
-// Route::get('/payment/{id}', [PaymentController::class, 'show'])->name('payment.show');
+// Route::get('/user/tagihan', [TagihanController::class, 'showPaymentPage'])->name('user.tagihan');
 
 // Proses checkout pembayaran
 Route::post('/user/checkout', [PaymentController::class, 'checkout'])->name('user.checkout');
 
-// Callback untuk Midtrans
-// Route::post('/user/callback', [PaymentController::class, 'callback'])->name('user.callback');
 
-// Route::post('/midtrans-callback', [PaymentController::class, 'callback']);
-Route::post('/payment/callback', [PaymentController::class, 'callback']);
+Route::post('/midtrans/callback', [PaymentController::class, 'callback']);
 
 
 // Route::post('/midtrans/callback', [PaymentController::class, 'callback'])->name('midtrans.callback');
@@ -284,8 +364,10 @@ Route::get('/paket', function () {
 })->name('paket');
 
 // Route untuk halaman utama
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', [QnaController::class, 'listQuestions'], function () {
+    return view('welcome') .'';
 });
-
-

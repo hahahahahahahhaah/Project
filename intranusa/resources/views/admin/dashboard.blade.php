@@ -112,8 +112,14 @@
             </li>
             <li>
                 <a href="survei">
-                    <i class='bx bxs-message-dots' ></i>
+                    <i class='bx bxs-data' ></i>
                     <span class="text">Data survey</span>
+                </a>
+            </li>
+            <li>
+                <a href="qna" >
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">ChatBot</span>
                 </a>
             </li>
         </ul>

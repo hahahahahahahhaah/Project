@@ -84,10 +84,14 @@
             </li>
             <li>
                 <a href="survei">
-                    <i class='bx bxs-message-dots'></i>
+                    <i class='bx bxs-data'></i>
                     <span class="text">Data survey</span>
                 </a>
             </li>
+            <a href="qna" >
+                <i class='bx bxs-message-dots'></i>
+                <span class="text">ChatBot</span>
+            </a>
         </ul>
         <ul class="side-menu">
             <li>
@@ -256,12 +260,15 @@
                                 <td>{{ $data->nama_pelanggan }}</td>
                                 <td>{{ $data->email }}</td>
                                 <td>{{ $data->lokasi_pemasangan }}</td>
-                                <td>{{ $data->paket }}</td>
+                                {{-- <td>{{ $data->paket }}</td>
+                                 --}}
+                                 <td>{{ $data->paket->nama_paket }}</td>
+
                                 <td>{{ $data->alamat_lengkap }}</td>
                                     {{-- <td>{{ $data->created_at }}</td> --}}
                                 <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M Y') }}</td>
 <td>
-    <button class="btn btn-primary btn-sm btn-detail" data-id="{{ $data->id_pelanggan }}">
+    <button class="btn btn-primary btn-sm btn-detail" data-id="{{ $data->pelanggan_id }}">
         Lihat Detail
     </button>
 </td>
@@ -269,6 +276,7 @@
                             @endforeach
                         </tbody>
                 </div>
+
                 </table>
                 <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -705,13 +713,16 @@ document.getElementById("downloadButtonId").addEventListener("click", generatePD
             let id = $(this).data('id'); // Ambil ID pelanggan dari tombol
 
             $.ajax({
-                url: `/admin/dashboard/detail/${id}`, // Panggil route
+                url: `/data/detail/${id}`,
+                // url: `/admin/dashboard/detail/${id}`, // Panggil route
                 type: 'GET',
                 success: function (response) {
                     // Isi modal dengan data yang didapat
                     $('#detail-nama').text(response.nama_pelanggan);
                     $('#detail-email').text(response.email);
-                    $('#detail-paket').text(response.paket);
+                    // $('#detail-paket').text(response.paket);
+                    $('#detail-paket').text(response.paket.nama_paket); // Menampilkan nama paket
+
                     $('#detail-nik').text(response.nik);
                     $('#detail-no_handphone_wa').text(response.no_handphone_wa);
                     $('#detail-no_handphone_2').text(response.no_handphone_2);

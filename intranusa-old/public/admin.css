@@ -1,0 +1,1416 @@
+  /* Base styles for sidebar and content */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--light);
+            z-index: 2000;
+            font-family: var(--lato);
+            transition: .3s ease;
+            overflow-x: hidden;
+        }
+
+        #content {
+            position: relative;
+            width: calc(100% - 280px);
+            left: 280px;
+            transition: .3s ease;
+        }
+
+        /* Mobile Responsive Styles */
+        @media screen and (max-width: 768px) {
+            #sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                margin: 0;
+                z-index: 2000;
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            }
+
+            #content {
+                width: 100%;
+                left: 0;
+                margin-top: 0; /* Remove top margin */
+            }
+
+            #content nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1999;
+                padding: 10px 20px;
+                background: var(--light);
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
+
+            #content main {
+                margin-top: 56px; /* Add margin equal to navbar height */
+                padding: 20px;
+            }
+
+            .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: var(--dark);
+                padding: 0;
+                margin: 0;
+                line-height: 1;
+            }
+
+            /* Box info adjustments */
+            #content main .box-info {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            /* Table adjustments */
+            .table-data {
+                overflow-x: auto;
+            }
+
+            .table-data .order,
+            .table-data .todo {
+                flex-basis: 100%;
+                margin-bottom: 20px;
+            }
+
+            /* Notification adjustments */
+             .notification-icon {
+                position: absolute;
+                right: 15px;
+                top: 5%;
+                transform: translateX(-130%);
+            }
+
+            .badge {
+                top: -8px !important;
+                right: -5px !important;
+
+            }
+        }
+
+        /* Small mobile devices */
+        @media screen and (max-width: 480px) {
+            #content main .head-title {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #content main .head-title h1 {
+                font-size: 24px;
+            }
+
+            .box-info li {
+                padding: 15px;
+            }
+
+            /* Table adjustments for very small screens */
+            .table-data table {
+                display: block;
+                width: 100%;
+            }
+
+            .table-data table tbody tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid var(--grey);
+                border-radius: 8px;
+                padding: 10px;
+            }
+
+            .table-data table td {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                border-bottom: 1px solid var(--grey);
+            }
+
+        }
+
+        /* Ensure smooth transitions */
+        #sidebar,
+        #content,
+        #content nav {
+            transition: all 0.3s ease;
+        }
+
+        /* Fix for modal display */
+        .modal-dialog {
+            margin: 1.75rem auto;
+        }
+
+        @media (max-width: 768px) {
+            .modal-dialog {
+                margin: 10px;
+                width: calc(100% - 20px);
+            }
+        }
+
+        /* Survey bars styling */
+        .progress-container {
+            width: 100%;
+            background-color: var(--grey);
+            margin: 5px 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 20px;
+            line-height: 20px;
+            color: white;
+            text-align: center;
+            font-size: 12px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-bar.green {
+            background-color: var(--blue);
+        }
+
+        .progress-bar.orange {
+            background-color: var(--orange);
+        }
+
+        .progress-bar.red {
+            background-color: var(--red);
+        }
+
+        #content main .table-data .todo {
+            flex-grow: 1;
+            flex-basis: 300px;
+        }
+
+        #content main .table-data .todo .todo-list {
+            width: 100%;
+        }
+
+        #content main .table-data .todo .todo-list li {
+            width: 100%;
+            margin-bottom: 16px;
+            background: var(--grey);
+            border-radius: 10px;
+            padding: 14px 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #content main .table-data .todo .todo-list li.completed {
+            border-left: 10px solid var(--blue);
+        }
+
+        #content main .table-data .todo .todo-list li p {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        @media screen and (max-width: 768px) {
+            /* ... previous mobile styles ... */
+
+            /* Preserve survey styling on mobile */
+            #content main .table-data .todo .todo-list li {
+                background: var(--grey);
+                border-radius: 10px;
+                padding: 14px 20px;
+                margin-bottom: 16px;
+            }
+
+            #content main .table-data .todo {
+                flex-basis: 100%;
+                margin-bottom: 20px;
+            }
+
+            .progress-container {
+                margin: 5px 0;
+            }
+        }
+
+    /* start data */
+    /* Filter container responsiveness */
+    @media (max-width: 768px) {
+        .filter-container {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            /* Membuat elemen penuh di layar kecil */
+            gap: 20px;
+            /* Jarak antara elemen-elemen */
+            width: 100%;
+            justify-content: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 120px;
+            padding: 5px;
+        }
+
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            gap: 15px;
+
+        }
+
+        .custom-btn-margin {
+            margin-top: 0;
+            height: 35px;
+            width: 120px;
+            padding: 0;
+            font-size: 0.85em;
+            text-align: center;
+            line-height: 35px;
+            border-radius: 5px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-left: auto;
+        }
+
+        .button-group button {
+            padding: 6px 12px;
+            font-size: 0.85em;
+        }
+    }
+
+    /* Table responsiveness */
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        /* Mengaktifkan scroll horizontal */
+        margin: 5px;
+    }
+
+    .table-responsive table {
+        width: 100%;
+        min-width: 1000px;
+        /* Sesuaikan lebar minimal tabel */
+    }
+
+    .table-responsive th,
+    .table-responsive td {
+        white-space: nowrap;
+        /* Menjaga teks agar tidak turun ke baris berikutnya */
+    }
+
+    /* Scrollbar styling */
+    .table-responsive::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #007bff;
+        border-radius: 5px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+        background: #e0e0e0;
+    }
+
+    /* Mobile specific adjustments */
+    @media (max-width: 768px) {
+        .table-container {
+            max-height: none;
+            padding: 10px;
+        }
+
+        .card-header {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        /* Adjust button spacing */
+        .d-flex.justify-content-left.mt-4 {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .d-flex.justify-content-left.mt-4 button {
+            margin: 5px 0 !important;
+            width: 100%;
+        }
+
+        /* Pagination adjustments */
+        .pagination {
+            margin-left: 0;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Modal adjustments */
+        .modal-dialog {
+            margin: 10px;
+        }
+
+        .modal-body {
+            padding: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+    }
+
+    /* Small mobile devices */
+    @media (max-width: 480px) {
+        .filter-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .filter-group {
+            width: 100%;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+        }
+
+        .button-group {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .button-group button {
+            flex: 1;
+            margin: 0 15px;
+
+        }
+    }
+
+    /* Ensure buttons are properly sized and spaced */
+    td > .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        margin: 0 5px;
+        white-space: nowrap;
+    }
+
+    td {
+        vertical-align: middle;
+        /* Mengatur agar konten di tengah vertikal */
+    }
+
+    /* Sidebar and main content responsiveness */
+    @media screen and (max-width: 768px) {
+        #sidebar {
+            width: 100%;
+            transform: translateX(-100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            margin: 0;
+            z-index: 2000;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+        }
+
+        #content {
+            width: 100% !important;
+            left: 0 !important;
+            margin-left: 0 !important;
+        }
+
+        #content nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1999;
+            padding: 10px 20px;
+            background: var(--light);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #content main {
+            margin-top: 60px;
+            padding: 15px;
+        }
+    }
+
+    /* Base styles for sidebar and content */
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100%;
+        background: var(--light);
+        z-index: 2000;
+        font-family: var(--lato);
+        transition: .3s ease;
+        overflow-x: hidden;
+    }
+
+    #content {
+        position: relative;
+        width: calc(100% - 280px);
+        left: 280px;
+        transition: .3s ease;
+    }
+
+    /* Mobile Responsive Styles */
+    @media screen and (max-width: 768px) {
+        #sidebar {
+            width: 280px;
+            transform: translateX(-100%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            margin: 0;
+            z-index: 2000;
+        }
+
+        #sidebar.active {
+            transform: translateX(0);
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #content {
+            width: 100% !important;
+            left: 0 !important;
+            margin-left: 0 !important;
+        }
+
+        #content nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1999;
+            padding: 10px 20px;
+            background: var(--light);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #content main {
+            margin-top: 56px;
+            padding: 20px;
+        }
+
+
+        .menu-toggle {
+            display: block;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--dark);
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .notification-icon {
+                position: absolute;
+                right: 15px;
+                top: 5%;
+                transform: translateX(-130%);
+
+            }
+
+            .card {
+                margin: 15px;
+            }
+
+            .card-header {
+                font-size: 22px;
+                padding: 20px;
+            }
+
+            .card-body {
+                padding: 20px;
+            }
+        /* Table responsiveness */
+        .table-responsive {
+            font-size: 14px;
+        }
+
+        .table-responsive td,
+        .table-responsive th {
+            padding: 12px 8px;
+        }
+
+        /* Form and button styling */
+        .filter-container {
+            flex-direction: column;
+            gap: 15px;
+
+        }
+
+        .filter-group {
+            width: 100%;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            height: 45px;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+        .button-group {
+            width: 100%;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .button-group button {
+            height: 40px;
+            font-size: 16px;
+            padding: 0 20px; 
+            min-width: 120px;
+            margin-top: 5px;
+        }
+
+        /* Modal adjustments */
+        .modal-dialog {
+            margin: 10px;
+            width: calc(100% - 20px);
+            max-width: none;
+        }
+
+        .modal-body {
+            padding: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            height: 45px;
+            font-size: 16px;
+        }
+    }
+
+    /* Additional mobile optimizations */
+    @media screen and (max-width: 480px) {
+        .table-responsive {
+            font-size: 13px;
+        }
+
+        .btn {
+            width: 50%;
+            margin-bottom: 10px;
+        }
+
+        .pagination {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+        }
+    }
+
+    .modal-header .btn-close{
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    opacity: 1;
+} 
+
+        /* Mengatur container utama */
+        .filter-container {
+            display: flex;
+            justify-content: flex-end;
+            /* Posisi form filter di sebelah kanan */
+            gap: 20px;
+            /* Jarak antar elemen form */
+            align-items: center;
+        }
+
+        /* Untuk elemen-elemen form filter (tanggal, bulan, hari) */
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            margin-right: 20px;
+            /* Jarak antara elemen filter dengan tombol */
+        }
+
+        .filter-group label {
+            margin-bottom: 5px;
+            /* Memberi sedikit ruang antara label dan input */
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 160px;
+            /* Membatasi lebar elemen input agar lebih seragam */
+        }
+
+        td>.btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            margin: 0 10px;
+            white-space: nowrap;
+        }
+
+        td {
+            vertical-align: middle;
+            /* Mengatur agar konten di tengah vertikal */
+        }
+
+        td .btn {
+            margin: 0 8px;
+        }
+
+        /* Mengatur tombol tambah data di sebelah kiri */
+        .custom-btn-margin {
+            margin-top: 25px;
+            /* Atur sesuai kebutuhan, menambahkan jarak vertikal hanya pada tombol */
+        }
+
+
+
+        /* Mengatur tombol filter dan reset agar berada di satu grup */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            /* Jarak antara tombol filter dan reset */
+            margin-top: 23px;
+        }
+
+        .card {
+            border-radius: 10px;
+            /* Sudut melengkung pada card */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            /* Bayangan lembut */
+        }
+
+
+        .table-container {
+            background-color: white;
+            padding: 50px;
+            /* Tambahkan padding untuk memberikan jarak di dalam kontainer */
+            border-radius: 8px;
+            /* Sudut melengkung */
+            width: calc(100% - 40px);
+            /* Lebar penuh dikurangi margin */
+            max-width: 100%;
+            /* Memperbesar lebar maksimum untuk kontainer */
+            margin: 20px auto;
+            /* Margin otomatis kiri dan kanan untuk menengahkannya */
+            box-sizing: border-box;
+            /* Memastikan padding dihitung dalam ukuran elemen */
+            overflow-x: auto;
+        }
+
+        .table {
+            width: 100%;
+            /* Tabel memenuhi lebar kontainer */
+            border-collapse: collapse;
+            /* Menghilangkan jarak antara border sel */
+            margin: 0;
+            /* Menghilangkan margin untuk menyelaraskan dengan latar belakang */
+
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+            /* Warna latar belakang abu-abu terang */
+            color: black;
+            /* Ganti warna teks menjadi hitam */
+            text-align: center;
+            /* Pusatkan teks pada header */
+            padding: 15px;
+            /* Mengurangi padding untuk memperbesar header */
+            font-size: 15px;
+            /* Meningkatkan ukuran font di header untuk tampilan yang lebih besar */
+            border-top-left-radius: 1px;
+            /* Melengkungkan sudut kiri atas */
+            border-top-right-radius: 1px;
+            /* Melengkungkan sudut kanan atas */
+            font-family: Arial, sans-serif;
+        }
+
+        /* Sel tabel */
+        .table td {
+            padding: 10px;
+            /* Mengurangi padding untuk sel tabel */
+            border: 1px solid #ddd;
+            /* Tambahkan border pada sel tabel */
+            background-color: white;
+            /* Menyesuaikan latar belakang sel dengan kontainer */
+        }
+
+        /* Mengubah warna border agar terlihat lebih menyatu */
+        .table td {
+            border-color: white;
+            /* Mengubah warna border agar menyatu dengan latar belakang putih */
+        }
+
+        /* Responsivitas untuk layar lebih kecil */
+        @media (max-width: 768px) {
+            .table-container {
+                padding: 15px;
+                /* Kurangi padding di layar kecil */
+                margin: 10px auto;
+                /* Margin lebih kecil untuk layar kecil */
+            }
+
+            .table th {
+                font-size: 12px;
+                /* Kecilkan ukuran font header tabel */
+                padding: 4px;
+                /* Kurangi padding di header tabel */
+            }
+        }
+
+
+        /* Penyesuaian padding di dalam card body */
+        .card-body {
+            padding: 15px;
+        }
+
+        /* Sel tabel */
+        .table td {
+            padding: 8px;
+            /* Tambahkan padding untuk sel tabel */
+            border: 1px solid #ddd;
+            /* Tambahkan border pada sel tabel */
+        }
+
+        .card-body {
+            padding: 10px;
+            /* Kurangi padding di dalam card body untuk layar kecil */
+        }
+
+
+        /* Hover efek pada baris tabel */
+        .table-hover tbody tr:hover {
+            background-color: #f2f2f2;
+            /* Warna latar saat hover */
+        }
+
+        /* Bordered tabel */
+        .table-bordered th,
+        .table-bordered td {
+            border: 1px solid #dee2e6;
+            /* Border tabel */
+        }
+
+        /* Striped rows */
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
+            /* Warna latar untuk baris ganjil */
+        }
+
+        /* Responsif pada layar kecil */
+        @media (max-width: 768px) {
+
+            .table th,
+            .table td {
+                font-size: 10px;
+                /* Ukuran font lebih kecil untuk layar kecil */
+                padding: 4px;
+                /* Kurangi padding di layar kecil */
+            }
+        }
+
+        /* Tabel responsif */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            /* Mengaktifkan scroll horizontal */
+            margin: 5px 0;
+        }
+
+        .table-responsive table {
+            width: 100%;
+            
+        }
+
+        
+        .table td {
+            padding: 15px;
+            /* Tambahkan padding untuk sel tabel */
+            border: 1px solid #ddd;
+            /* Tambahkan border pada sel tabel */
+            background-color: white;
+            /* Menyesuaikan latar belakang sel dengan kontainer */
+        }
+
+        /* Menambahkan pengaturan untuk membuat tabel lebih besar dan dekat dengan latar belakang */
+        .table-container {
+            padding: 20px;
+            /* Kurangi padding kontainer jika perlu untuk memberi ruang lebih pada tabel */
+        }
+
+        .card-header {
+            font-size: 16px;
+            /* Ukuran font header */
+            font-family: Arial, sans-serif;
+            background-color: #007bff;
+            /* Warna biru pada header */
+            color: white;
+            /* Mengubah warna teks menjadi putih */
+            border-top-left-radius: 15px;
+            /* Melengkungkan sudut kiri atas */
+            border-top-right-radius: 10px;
+            /* Melengkungkan sudut kanan atas */
+            padding: 11px;
+            /* Tambahkan padding agar teks tidak terlalu dekat dengan tepi */
+            width: calc(100% + 40px);
+            /* Meningkatkan lebar agar kotak biru lebih lebar */
+            margin-left: -1px;
+            /* Menyesuaikan margin kiri agar lebih lebar */
+            margin-right: -1px;
+            /* Menyesuaikan margin kanan agar sejajar dengan background putih */
+            box-sizing: border-box;
+            /* Memastikan padding dihitung dalam ukuran elemen */
+        }
+
+
+        .table-responsive th,
+        .table-responsive td {
+            white-space: nowrap;
+            /* Menjaga agar teks tetap di satu baris */
+            padding: 6px;
+            /* Mengurangi padding agar tabel lebih kompak */
+            text-align: left;
+            /* Atur rata kiri untuk semua isi tabel */
+        }
+
+        /* Untuk layar kecil, agar kolom teks dapat membungkus */
+        @media (max-width: 768px) {
+
+            .table-responsive th,
+            .table-responsive td {
+                white-space: normal;
+                /* Memungkinkan teks membungkus */
+                word-wrap: break-word;
+                /* Membungkus kata jika terlalu panjang */
+            }
+        }
+
+
+        /* Menghapus padding pada body (jika diperlukan) */
+        body {
+            margin: 0;
+            /* Hapus margin untuk memastikan kontainer dapat penuh */
+            padding: 0;
+            /* Hapus padding untuk memastikan kontainer dapat penuh */
+        }
+
+
+        .btn-primary.btn-sm {
+            background-color: #007bff;
+            color: white;
+            border: 2px solid #0056b3;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            /* Pastikan ukuran font cukup besar untuk keterbacaan */
+        }
+
+        .btn-primary.btn-sm:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+
+
+        /* Container untuk progress bar */
+        .progress-container {
+            border-radius: 10px;
+            position: relative;
+            height: 30px;
+            width: 100%;
+            /* Sesuaikan dengan lebar container */
+            background-color: #e0e0e0;
+            /* Warna latar belakang container */
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            /* Tambahkan bayangan agar terlihat lebih dalam */
+        }
+
+        @media (max-width: 768px) {
+             .filter-container {
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-group label {
+                font-size: 18px;
+                margin-bottom: 10px;
+                display: block;
+            }
+
+            .filter-group input,
+            .filter-group select {
+                width: 100%;
+                height: 50px;
+                font-size: 18px;
+                padding: 10px 15px;
+            }
+
+            /* Action buttons */
+            .btn {
+                height: 40px;
+                font-size: 18px;
+                padding: 0 25px;
+                margin: 5px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        /* Mengatur tabel agar kolom tidak turun */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            /* Mengaktifkan scroll horizontal */
+            margin: 5px;
+        }
+
+
+        .table-responsive table {
+            width: 100%;
+            min-width: 1000px;
+            /* Sesuaikan lebar minimal tabel */
+
+        }
+
+        .table-responsive th,
+        .table-responsive td {
+            white-space: nowrap;
+            /* Menjaga teks agar tidak turun ke baris berikutnya */
+
+        }
+
+        /* Scrollbar styling */
+        .table-responsive::-webkit-scrollbar {
+            height: 1px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #007bff;
+            border-radius: 5px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: #e0e0e0;
+        }
+
+        .page-link {
+            color: black;
+
+        }
+
+        .page-item.active .page-link {
+            z-index: 3;
+            color: #fff;
+            background-color: black;
+            border-color: black;
+        }
+
+
+
+
+
+        @media (max-width: 768px) {
+            .table-container {
+                max-height: none;
+            }
+
+            table th,
+            table td {
+                white-space: normal;
+                /* Agar teks bisa membungkus pada layar kecil */
+                word-wrap: break-word;
+            }
+
+        }
+
+        /* Mengatur tombol aksi di tabel */
+        td>.btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            margin: 0 5px;
+            white-space: nowrap;
+        }
+
+        td {
+            vertical-align: middle;
+            /* Mengatur agar konten di tengah vertikal */
+        }
+    /* finish data */
+
+    /* start notification */
+     /* Base styles for sidebar and content */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100%;
+            background: var(--light);
+            z-index: 2000;
+            font-family: var(--lato);
+            transition: .3s ease;
+            overflow-x: hidden;
+        }
+
+        #content {
+            position: relative;
+            width: calc(100% - 280px);
+            left: 280px;
+            transition: .3s ease;
+        }
+
+        /* Navigation styles */
+        nav {
+            position: relative;
+            width: 100%;
+            padding: 15px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            grid-gap: 24px;
+            height: 64px;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Mobile Responsive Styles */
+        @media screen and (max-width: 768px) {
+            body {
+                font-size: 16px;
+            }
+
+            #sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+            }
+
+            #sidebar.active {
+                transform: translateX(0);
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            }
+
+            #content {
+                width: 100% !important;
+                left: 0 !important;
+                padding: 15px;
+            }
+
+            .menu-toggle {
+                display: block;
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 1001;
+            }
+
+            nav {
+                padding-left: 60px; /* Make room for burger menu */
+            }
+
+            .notification-icon {
+                position: absolute !important;
+                right: 15px !important;
+                left: auto !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+            }
+
+            /* Notification specific styles */
+            .notif-container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            .notif-box {
+                padding: 20px;
+                margin-bottom: 15px;
+                font-size: 18px !important;
+            }
+
+            .notif-box p {
+                font-size: 16px !important;
+                margin: 0;
+                line-height: 1.5;
+            }
+
+            .detail-box {
+                padding: 20px;
+                margin-top: 10px;
+                font-size: 16px !important;
+            }
+
+            .detail-box p {
+                margin-bottom: 15px;
+                line-height: 1.6;
+            }
+
+            .detail-box strong {
+                font-size: 16px;
+                display: inline-block;
+                min-width: 150px;
+            }
+
+            /* Notification icons */
+            .notif-box i {
+                font-size: 24px;
+                margin-right: 15px;
+            }
+
+            .delete-icon {
+                font-size: 24px;
+                padding: 10px;
+            }
+
+            /* Title styling */
+            h1 {
+                font-size: 24px !important;
+                padding: 15px !important;
+                margin: 10px 0 !important;
+                text-align: center;
+            }
+
+            /* New notification indicator */
+            .notif-box.new::before {
+                width: 12px;
+                height: 12px;
+                top: 15px;
+                left: 15px;
+            }
+
+            /* Popup notification */
+            .popup-notification {
+                width: 90%;
+                max-width: 300px;
+                right: 10px;
+                top: 10px;
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+        }
+
+        /* Very small screens */
+        @media screen and (max-width: 480px) {
+            .notif-box {
+                padding: 15px;
+            }
+
+            .detail-box {
+                padding: 15px;
+            }
+
+            .notif-box p {
+                font-size: 14px !important;
+            }
+
+            .detail-box p {
+                font-size: 14px !important;
+            }
+
+            .detail-box strong {
+                min-width: 120px;
+                margin-right: 10px;
+            }
+
+            h1 {
+                font-size: 20px !important;
+            }
+
+            .popup-notification {
+                width: calc(100% - 20px);
+                max-width: none;
+                right: 10px;
+                left: 10px;
+            }
+        }
+
+        /* Sidebar: Menghilangkan garis setiap kata */
+#sidebar ul li a {
+    text-decoration: none; /* Menghilangkan garis */
+}
+/* Container styling */
+.notif-container {
+    display: flex;               /* Flexbox layout */
+    flex-direction: column;      /* Notifikasi berjajar ke bawah */
+    gap: 15px;                   /* Jarak antar notifikasi */
+    max-width: 800px;            /* Lebar maksimum container */
+    margin: 20px auto;           /* Center the container */
+}
+
+/* Horizontal notifikasi styling */
+.notif-box {
+    width: 100%;                 /* Full width */
+    padding: 20px 30px;          /* Spacing inside the box */
+    background-color: #ffffff;   /* Background putih */
+    border-radius: 10px;         /* Rounded corners */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    display: flex;               /* Flex layout for horizontal design */
+    justify-content: space-between; /* Distribute items horizontally */
+    align-items: center;         /* Center items vertically */
+    cursor: pointer;             /* Pointer cursor on hover */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Hover effect */
+}
+
+/* Hover effect to slightly lift the notification */
+.notif-box:hover {
+    transform: translateY(-3px); /* Slight lift on hover */
+    background-color: #f1f1f1;   /* Change background on hover */
+}
+
+/* Notification text styling */
+.notif-box p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+    flex: 1;                     /* Fill available space */
+}
+
+/* Hidden detail box (default: hidden) */
+.detail-box {
+    display: none;               /* Initially hidden */
+    padding: 10px 20px;
+    background-color: #f8f9fa;   /* Light gray background */
+    border-radius: 8px;
+    margin-top: 10px;
+    box-shadow: inset 0px 0px 5px rgba(0, 0, 0, 0.1); /* Soft inner shadow */
+}
+
+/* Show the detail box when clicked */
+.notif-box.active + .detail-box {
+    display: block;              /* Show details */
+}
+
+/* Optional: Icon or indicator for notification */
+.notif-box i {
+    font-size: 24px;
+    color: #007bff;              /* Icon color */
+    margin-right: 10px;
+}
+
+/* Styling untuk tanda notifikasi baru (belum dibaca) */
+.notif-box.new::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background-color: red;    /* Lingkaran merah */
+    border-radius: 50%;
+    position: absolute;       /* Absolute position untuk menempatkan lingkaran */
+    top: 20px;                /* Atur posisi vertikal */
+    left: 20px;               /* Atur posisi horizontal */
+}
+
+/* Sesuaikan ikon dan teks notifikasi agar tidak tertutup oleh lingkaran */
+.notif-box {
+    position: relative;       /* Menambahkan posisi relatif untuk referensi */
+    padding-left: 40px;       /* Beri jarak agar ikon tidak tertutup oleh lingkaran */
+}
+/* Style untuk ikon hapus (X) */
+.delete-icon {
+    font-size: 20px;
+    color: #ff0000;  /* Warna merah */
+    cursor: pointer;
+    margin-left: 10px;
+    transition: color 0.3s;
+}
+
+/* Hover efek untuk ikon hapus */
+.delete-icon:hover {
+    color: #ff5555;
+}
+
+/* Style untuk pop-up notifikasi */
+.popup-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    font-size: 16px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.popup-notification:hover {
+    opacity: 1;
+}
+
+h1 {
+            text-align: center;
+            font-size: 2.5rem; /* Ukuran font untuk judul */
+            color: #2c3e50; /* Warna judul */
+            text-transform: uppercase; /* Ubah semua huruf menjadi kapital */
+            letter-spacing: 2px; /* Jarak antar huruf */
+            padding: 10px 0; /* Padding atas dan bawah */
+            border-bottom: 3px ; /* Garis bawah */
+            margin-bottom: 20px; /* Margin bawah untuk jarak dengan elemen lain */
+        }
+
+/* Warna background untuk notifikasi baru (belum dibaca) */
+.notif-box.new {
+    background-color: #e6f7ff;  /* Biru muda untuk menandakan notifikasi baru */
+    border-left: 5px solid #007bff; /* Garis tepi biru */
+}
+
+/* Warna background untuk notifikasi yang sudah dibaca */
+.notif-box.read {
+    background-color: #f8f9fa;  /* Warna abu-abu terang untuk notifikasi yang sudah dibaca */
+    border-left: 5px solid #ccc; /* Garis tepi abu-abu */
+}
+
+/* finish notification */

@@ -15,6 +15,7 @@
 
     <button id="pay-button">Bayar Sekarang</button>
 
+
     <script type="text/javascript">
         // For example trigger on button clicked, or any time you need
         var payButton = document.getElementById('pay-button');

@@ -41,7 +41,7 @@
     <!-- SIDEBAR -->
     <section id="sidebar">
         <a href="#" class="brand">
-           <i class='bx bx-wifi' ></i>
+            <i class='bx bx-wifi'></i>
             <span class="text">Intranusa</span>
         </a>
         <ul class="side-menu top">
@@ -51,16 +51,20 @@
                     <span class="text">Dashboard</span>
                 </a>
             </li>
-            <li>
-                <a href="data">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Data Berlangganan</span>
-                </a>
-            </li>
+            <a href="data">
+                <i class='bx bxs-group'></i>
+                <span class="text">Data Berlangganan</span>
+            </a>
             <li class="active">
                 <a href="survei">
                     <i class='bx bxs-message-dots'></i>
                     <span class="text">Data survey</span>
+                </a>
+            </li>
+            <li>
+                <a href="qna" >
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">ChatBot</span>
                 </a>
             </li>
         </ul>
@@ -113,7 +117,7 @@
                     </span>
 
                 </a>
-                <audio id="notificationSound" src="path/to/your/notification-sound.mp3" preload="auto"></audio>
+
 
             </div>
         </nav>
@@ -124,12 +128,6 @@
             <div class="container">
                 <div class="row mb-3">
                     <!-- Tombol "Tambah Data" di sisi kiri -->
-                    <div class="col-md-2 mb-2">
-                        <button type="button" class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#modalTambah"
-                            data-bs-target="#staticBackdrop"><i class="bi bi-plus"></i>
-                            Tambah data
-                        </button>
-                    </div>
                     <div class="col-md-10">
                         <form id="filter-form">
                             <div class="filter-container">
@@ -161,7 +159,7 @@
                                 <!-- Button group di sebelah kanan -->
                                 <div class="button-group">
                                     <button type="submit" class="btn btn-primary">Filter</button>
-                                     <a href="survei.php" class="btn btn-danger">Reset</a>
+                                    <a href="survei.php" class="btn btn-danger">Reset</a>
                                 </div>
                             </div>
                         </form>
@@ -169,27 +167,44 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered table-striped table-hover cihuy">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th>
-                            <th>Nama dan alamat pelanggan</th>
+                            <th>#</th>
+                            <th>Nama</th>
                             <th>Email</th>
-                            <th>Kualitas internet</th>
-                            <th>Customer service</th>
+                            <th>Alamat</th>
+                            <th>Koneksi</th>
+                            <th>CS</th>
                             <th>Teknisi</th>
                             <th>Gangguan</th>
                             <th>Kecepatan</th>
-                            <th>Kualitas harga</th>
+                            <th>Harga</th>
                             <th>Rekomendasi</th>
-                            <th>Komentar</th>
-                            <th>Created at</th>
-                            <th>Aksi</th>
+                            <th>Saran</th>
                         </tr>
                     </thead>
-
                     <tbody>
-
+                        @forelse ($feedback as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->nama }}</td>
+                            <td>{{ $item->email }}</td>
+                            <td>{{ $item->alamat }}</td>
+                            <td>{{ $item->koneksi }}</td>
+                            <td>{{ $item->puas_cs }}</td>
+                            <td>{{ $item->puas_teknisi }}</td>
+                            <td>{{ $item->gangguan }}</td>
+                            <td>{{ $item->kecepatan }}</td>
+                            <td>{{ $item->harga }}</td>
+                            <td>{{ $item->rekomendasi }}</td>
+                            <td>{{ $item->saran }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="12" class="text-center">Tidak ada data feedback.</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-left mt-4">
@@ -228,121 +243,7 @@
 
 
                 <!-- start modal tambah -->
-                <div class="modal fade" id="modalTambah" data-bs-keyboard="false"
-                    tabindex="-1" aria-LabeLLedby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">Form Data Pelanggan</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form method="POST" id="formTambahData">
-                                <input type="hidden" name="id" value="">
-                                <div class="modal-body">
 
-                                    <div class="form-group">
-                                        <label class="form-label">Nama dan alamat Pelanggan</label>
-                                        <input type="text" class="form-control" name="tnama"
-                                            placeholder="Masukkan Nama dan alamat lengkap" required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="form-label">Email</label>
-                                        <input type="text" class="form-control" name="email"
-                                            placeholder="Masukkan alamat email anda.." required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="form-label">Kualitas internet</label>
-                                        <select class="form-control" name="tkualitas" required>
-                                            <option></option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="form-label">Customer service</label>
-                                        <select class="form-control" name="tservice" required>
-                                            <option></option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="form-label">Teknisi</label>
-                                        <select class="form-control" name="tteknisi" required>
-                                            <option></option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                            <option value="4">4</option>
-                                            <option value="5">5</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="form-label">Gangguan</label>
-                                        <select class="form-control" name="tgangguan" required>
-                                            <option></option>
-                                            <option value="Tidak pernah">Tidak pernah</option>
-                                            <option value="Jarang">Jarang</option>
-                                            <option value="Kadang-kadang">Kadang-kadang</option>
-                                            <option value="Sering">Sering</option>
-                                            <option value="Sangat sering">Sangat sering</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Kecepatan</label>
-                                        <select class="form-control" name="tkecepatan" required>
-                                            <option></option>
-                                            <option value="Sangat sesuai">Sangat sesuai</option>
-                                            <option value="Sesuai">Sesuai</option>
-                                            <option value="Cukup sesuai">Cukup sesuai</option>
-                                            <option value="Tidak sesuai">Tidak sesuai</option>
-                                        </select>
-
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Kualitas harga</label>
-                                        <select class="form-control" name="tharga" required>
-                                            <option></option>
-                                            <option value="Ya, sebanding">Ya, sebanding</option>
-                                            <option value="Tidak, tidak sebanding">Tidak, tidak sebanding</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Rekomendasi</label>
-                                        <select class="form-control" name="trekomendasi" required>
-                                            <option></option>
-                                            <option value="Sangat mungkin">Sangat mungkin</option>
-                                            <option value="Mungkin">Mungkin</option>
-                                            <option value="Tidak mungkin">Tidak mungkin</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Komentar</label>
-                                        <textarea class="form-control" name="tkomentar" rows="3" required></textarea>
-                                    </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Keluar</button>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- finish modal tambah -->
-                    </div>
                     {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
                     <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
                     <script src="fetch-survey.js"></script>

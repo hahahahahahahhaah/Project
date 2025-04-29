@@ -19,12 +19,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syarat dan ketentuan</title>
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="icon">
-    <link href="{{ asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
-    <link rel="stylesheet" href="{{ asset('asset/fontawesome/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('style1.css') }}">
-    <link rel="stylesheet" href="{{ asset('asset/bootstrap/css/bootstrap.min.css') }}">
-    <script src="{{ asset('js/jquery-3.7.1.min.js') }}" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="{{  secure_asset('asset/img/jjj.jpg') }}" rel="icon">
+    <link href="{{  secure_asset('asset/img/jjj.jpg') }}" rel="apple-touch-icon">
+    <link rel="stylesheet" href="{{  secure_asset('asset/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{  secure_asset('style1.css') }}">
+    <link rel="stylesheet" href="{{  secure_asset('asset/bootstrap/css/bootstrap.min.css') }}">
+    <script src="{{  secure_asset('js/jquery-3.7.1.min.js') }}" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <style>
         /* Mengatur tampilan section multistep */
@@ -221,7 +221,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8 mb-2 d-flex align-items-center justify-content-center">
-                    <img src="{{ asset('asset/img/lloo.png') }}" alt="Intranusa.id" width="300" height="300"/>
+                    <img src="{{  secure_asset('asset/img/lloo.png') }}" alt="Intranusa.id" width="300" height="300"/>
 
                 </div>
             </div>
@@ -329,14 +329,14 @@
         </div>
     </section>
 
-    <script src="{{ asset('dist/adminlte.min.js') }}"></script>
-    <script src="{{ asset('jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/popper.js') }}"></script>
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
-    <script defer src="{{ asset('js/beacon.min.js') }}"></script>
+    <script src="{{  secure_asset('dist/adminlte.min.js') }}"></script>
+    <script src="{{  secure_asset('jquery/jquery.min.js') }}"></script>
+    <script src="{{  secure_asset('js/popper.js') }}"></script>
+    <script src="{{  secure_asset('bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{  secure_asset('js/main.js') }}"></script>
+    <script defer src="{{  secure_asset('js/beacon.min.js') }}"></script>
 
-    <script src="{{ asset('fetch-data.js') }}"></script>
+    <script src="{{  secure_asset('fetch-data.js') }}"></script>
 
     {{-- <script>
         document.getElementById("submitBtn").addEventListener("click", function(e) {

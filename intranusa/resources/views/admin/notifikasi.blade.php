@@ -504,12 +504,12 @@ h1 {
                         <span class="badge bg-warning">{{ $pelanggan->status_langganan }}</span>
                     </td>
                     <td>
-                        <form action="{{ route('notifikasi.approve', $pelanggan->id_pelanggan) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('notifikasi.approve', $pelanggan->pelanggan_id) }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-success btn-sm">Terima</button>
                         </form>
 
-                        <form action="{{ route('notifikasi.reject', $pelanggan->id_pelanggan) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('notifikasi.reject', $pelanggan->pelanggan_id) }}" method="POST" style="display: inline;">
                             @csrf
                             <button type="submit" class="btn btn-danger btn-sm">Tolak</button>
                         </form>

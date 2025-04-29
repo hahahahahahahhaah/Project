@@ -19,9 +19,35 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'username' => 'user1',
-            // 'nik' => '1234567890123456',
-            // 'npwp' => '123456789012345',
+            'username' => 'Sufi',
+            'password' => Hash::make('password'),
+            'profile_picture' => 'default-profile.jpg',
+            'status_langganan' => 'Tidak Aktif',
+            'role' => 'user',
+        ]);
+        User::create([
+            'username' => 'Ambar',
+            'password' => Hash::make('password'),
+            'profile_picture' => 'default-profile.jpg',
+            'status_langganan' => 'Tidak Aktif',
+            'role' => 'user',
+        ]);
+        User::create([
+            'username' => 'Dhea',
+            'password' => Hash::make('password'),
+            'profile_picture' => 'default-profile.jpg',
+            'status_langganan' => 'Tidak Aktif',
+            'role' => 'user',
+        ]);
+        User::create([
+            'username' => 'Intan',
+            'password' => Hash::make('password'),
+            'profile_picture' => 'default-profile.jpg',
+            'status_langganan' => 'Tidak Aktif',
+            'role' => 'user',
+        ]);
+        User::create([
+            'username' => 'Freya',
             'password' => Hash::make('password'),
             'profile_picture' => 'default-profile.jpg',
             'status_langganan' => 'Tidak Aktif',
